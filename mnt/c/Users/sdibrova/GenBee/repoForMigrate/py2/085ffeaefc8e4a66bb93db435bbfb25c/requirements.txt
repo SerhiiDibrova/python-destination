@@ -1,0 +1,41 @@
+```
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import os
+import sys
+
+if sys.version_info < (2, 7):
+    print("Python version is not supported. Please use Python 2.7.")
+    sys.exit(1)
+
+try:
+    import flask
+except ImportError:
+    print("Flask is not installed. Installing...")
+    os.system("pip install Flask==1.0.2")
+    import flask
+
+try:
+    import requests
+except ImportError:
+    print("requests is not installed. Installing...")
+    os.system("pip install requests==2.21.0")
+    import requests
+
+try:
+    import numpy as np
+except ImportError:
+    print("numpy is not installed. Installing...")
+    os.system("pip install numpy==1.16.1")
+    import numpy as np
+
+app = flask.Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello, World!"
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
