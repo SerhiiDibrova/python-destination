@@ -1,0 +1,42 @@
+import socket
+import threading
+from tkinter import *
+
+client = socket.socket()
+client.connect(('localhost', 63453))
+root = Tk()
+
+def send():
+    data_send = get_message.get()
+    if data_send != "":
+        try:
+            client.sendall(data_send.encode())
+        except Exception as e:
+            print(f"Error sending message: {e}")
+        lbl = Label(root, text=data_send, bg="red", fg="white")
+        get_message.delete(0, END)
+        lbl.pack(fill=X, side=TOP)
+
+def recv():
+    while True:
+        try:
+            data_recv = client.recv(1024).decode()
+            if data_recv is not None and data_recv != "":
+                lbl = Label(root, text=data_recv, bg="blue", fg="white")
+                lbl.pack(fill=X, side=TOP)
+        except Exception as e:
+            print(f"Error receiving message: {e}")
+
+get_message = Entry(root)
+send_message = Button(root, text="Send", command=send)
+
+send_message.pack(fill=X, side=BOTTOM)
+get_message.pack(fill=X, side=BOTTOM)
+
+threading.Thread(target=recv).start()
+
+root.title("Chat Client")
+root.geometry("500x700")
+root.resizable(width=False, height=False)
+
+root.mainloop()
